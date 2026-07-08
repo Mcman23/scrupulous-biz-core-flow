@@ -1,0 +1,35 @@
+{
+  "name": "Company",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "aktiv",
+        "deaktiv"
+      ],
+      "default": "aktiv"
+    }
+  },
+  "required": [
+    "company_name"
+  ]
+}

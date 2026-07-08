@@ -1,0 +1,34 @@
+{
+  "name": "Deal",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "service_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "davam edir",
+        "tamamland\u0131",
+        "l\u0259\u011fv edildi"
+      ],
+      "default": "davam edir"
+    },
+    "close_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "client_id"
+  ]
+}

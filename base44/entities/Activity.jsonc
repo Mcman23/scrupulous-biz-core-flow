@@ -1,0 +1,29 @@
+{
+  "name": "Activity",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Z\u0259ng",
+        "WhatsApp",
+        "G\u00f6r\u00fc\u015f",
+        "Email"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "client_id",
+    "type"
+  ]
+}

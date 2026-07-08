@@ -1,0 +1,27 @@
+{
+  "name": "FollowUp",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "reminder_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "g\u00f6zl\u0259yir",
+        "tamamland\u0131"
+      ],
+      "default": "g\u00f6zl\u0259yir"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

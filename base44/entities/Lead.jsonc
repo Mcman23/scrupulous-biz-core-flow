@@ -1,0 +1,40 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Yeni m\u00fcraci\u0259t",
+        "\u018flaq\u0259 saxlan\u0131ld\u0131",
+        "G\u00f6r\u00fc\u015f t\u0259yin edildi",
+        "T\u0259klif g\u00f6nd\u0259rildi",
+        "Dan\u0131\u015f\u0131q gedir",
+        "Qazan\u0131ld\u0131",
+        "\u0130tirildi"
+      ],
+      "default": "Yeni m\u00fcraci\u0259t"
+    },
+    "service_id": {
+      "type": "string"
+    },
+    "budget": {
+      "type": "number"
+    },
+    "assigned_user": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_id"
+  ]
+}

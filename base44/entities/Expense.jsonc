@@ -1,0 +1,36 @@
+{
+  "name": "Expense",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "deal_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Reklam",
+        "Material",
+        "Personal",
+        "N\u0259qliyyat",
+        "Dig\u0259r"
+      ],
+      "default": "Dig\u0259r"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "amount"
+  ]
+}

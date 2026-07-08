@@ -1,0 +1,30 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "\u00f6d\u0259nilib",
+        "g\u00f6zl\u0259yir"
+      ],
+      "default": "g\u00f6zl\u0259yir"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "client_id"
+  ]
+}
