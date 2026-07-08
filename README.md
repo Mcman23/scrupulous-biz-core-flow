@@ -1,77 +1,45 @@
-# Base44 Project
+# Scrupulous Biz Core Flow
 
-Use this repository to run and edit the app locally, then publish changes back through Base44.
+A standalone CRM app (React + Vite) — companies, clients, pipeline/leads, deals, services, expenses, payments and follow-ups.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+This project is fully independent: it no longer depends on Base44's backend. Data and authentication are powered by [Supabase](https://supabase.com) (Postgres + Auth), and it deploys automatically to [Vercel](https://vercel.com) on every push to `main`.
 
-## Prerequisites
+## Stack
 
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
+- React 18 + Vite 6
+- Tailwind CSS + shadcn/ui components
+- Supabase (Postgres database + Auth) via `@supabase/supabase-js`
+- React Query for data fetching/caching
+- Deployed on Vercel, connected to this GitHub repo for CI/CD
 
-See the [Base44 CLI docs](https://docs.base44.com/developers/references/cli/get-started/overview) if you want to run Base44 commands directly.
+## One-time setup
 
-## Run Locally
+1. **Database schema** — open your Supabase project → SQL Editor → paste the contents of `supabase_migration.sql` from this repo → Run. This creates all tables (companies, clients, services, leads, deals, expenses, payments, follow_ups, activities, profiles), row-level security policies, and an auto-profile trigger for new signups.
+2. **Environment variables** — copy `.env.example` to `.env.local` for local dev, and set the same two variables in your Vercel project settings (Production/Preview/Development):
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
 
-Run the full local development environment from the project root:
+   Both values are on your Supabase project's **Settings → API** page.
 
-```bash
-base44 dev
-```
-
-`base44 dev` starts the local Base44 development backend and, when this app is configured for it, also starts the frontend dev server for you. Use the frontend URL printed by the command.
-
-For example, when the Base44 project config includes a `serveCommand`, `base44 dev` can launch the frontend too:
-
-```json5
-{
-  "site": {
-    "serveCommand": "npm run dev"
-  }
-}
-```
-
-In a Base44 project this lives in `base44/config.jsonc`.
-
-## Run Only The Frontend
-
-If you only want to work on the frontend against the hosted Base44 backend, run:
+## Run locally
 
 ```bash
+npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite.
-
-## Use The Hosted Backend
-
-For frontend-only development, create or update `.env.local` in the project root:
+## Build
 
 ```bash
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
+npm run build
 ```
 
-`VITE_BASE44_APP_ID` identifies the Base44 app.
+## Auth
 
-`VITE_BASE44_APP_BASE_URL` tells the Base44 Vite plugin where to send local `/api` requests. Point it at your deployed Base44 app URL when you want the local frontend to use the hosted backend.
+- Email/password sign up sends a confirmation link (Supabase default) — no extra config needed.
+- "Continue with Google" requires enabling the Google provider in Supabase → Authentication → Providers.
+- Password reset uses Supabase's recovery-link flow.
 
-When you use `base44 dev`, the command injects the local Base44 values for you, so `.env.local` is mainly needed for frontend-only workflows.
+## Deployment
 
-## Publish Your Changes
-
-After pushing your changes to git, open the Base44 dashboard and publish the app:
-
-```bash
-base44 dashboard open
-```
-
-## Docs & Support
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Base44 CLI command reference: [https://docs.base44.com/developers/references/cli/commands/introduction](https://docs.base44.com/developers/references/cli/commands/introduction)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+This repo is linked to a Vercel project — pushing to `main` triggers an automatic production deployment.

@@ -4,8 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { UserPlus, Mail, Lock, Loader2, MailCheck } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
@@ -16,8 +15,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showOtp, setShowOtp] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,25 +27,9 @@ export default function Register() {
     setLoading(true);
     try {
       await base44.auth.register({ email, password });
-      setShowOtp(true);
+      setSent(true);
     } catch (err) {
-      setError("Qeydiyyat zamanı xəta baş verdi");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerify = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const result = await base44.auth.verifyOtp({ email, otpCode });
-      if (result?.access_token) {
-        base44.auth.setToken(result.access_token);
-      }
-      window.location.href = "/";
-    } catch (err) {
-      setError("Təsdiq kodu yanlışdır");
+      setError(err?.message || "Qeydiyyat zamanı xəta baş verdi");
     } finally {
       setLoading(false);
     }
@@ -58,11 +40,11 @@ export default function Register() {
     try {
       await base44.auth.resendOtp(email);
       toast({
-        title: "Kod göndərildi",
-        description: "Yeni kod üçün emailinizi yoxlayın.",
+        title: "Email göndərildi",
+        description: "Təsdiq linki üçün emailinizi yoxlayın.",
       });
     } catch (err) {
-      setError("Kodu yenidən göndərmək mümkün olmadı");
+      setError("Emaili yenidən göndərmək mümkün olmadı");
     }
   };
 
@@ -70,52 +52,28 @@ export default function Register() {
     base44.auth.loginWithProvider("google", "/");
   };
 
-  if (showOtp) {
+  if (sent) {
     return (
       <AuthLayout
-        icon={Mail}
-        title="Emailinizi təsdiqləyin"
-        subtitle={`${email} ünvanına kod göndərdik`}
+        icon={MailCheck}
+        title="Emailinizi yoxlayın"
+        subtitle={`${email} ünvanına təsdiq linki göndərdik`}
+        footer={
+          <Link to="/login" className="text-primary font-medium hover:underline">
+            Girişə qayıt
+          </Link>
+        }
       >
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
             {error}
           </div>
         )}
-        <div className="flex justify-center mb-6">
-          <InputOTP
-            maxLength={6}
-            value={otpCode}
-            onChange={setOtpCode}
-            autoFocus
-            autoComplete="one-time-code"
-          >
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
-          </InputOTP>
-        </div>
-        <Button
-          className="w-full h-12 font-medium"
-          onClick={handleVerify}
-          disabled={loading || otpCode.length < 6}
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Təsdiqlənir...
-            </>
-          ) : (
-            "Təsdiqlə"
-          )}
-        </Button>
-        <p className="text-center text-sm text-muted-foreground mt-4">
-          Kod gəlmədi?{" "}
+        <p className="text-sm text-muted-foreground text-center mb-6">
+          Hesabınızı aktivləşdirmək üçün emailinizdəki linkə klikləyin.
+        </p>
+        <p className="text-center text-sm text-muted-foreground">
+          Email gəlmədi?{" "}
           <button onClick={handleResend} className="text-primary font-medium hover:underline">
             Yenidən göndər
           </button>
@@ -216,7 +174,7 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Hesab yaradılır...
+              Yaradılır...
             </>
           ) : (
             "Hesab yarat"
